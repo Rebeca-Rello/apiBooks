@@ -2,6 +2,7 @@
 const cors = require ('cors')
 const express =require("express")
 const userRouters = require ("../src/routers/user.routers")
+const booksRouters = require ("../src/routers/books.routers")
 const errorHandling = require("./error/errorHandling")
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
 app.use(userRouters);
+app.use(booksRouters);
 app.use(function(req, res, next){
 
     res.status(404).json({error:true,

@@ -31,7 +31,7 @@ function postUser(request, response){
     }
 
     function loginUser(request, response) {
-      
+      let respuesta;
       let params = [request.body.email, request.body.password];
       let sql = "SELECT id_user, name, last_name, email, photo FROM user WHERE email = ? AND password = ?";
     
@@ -39,15 +39,44 @@ function postUser(request, response){
         if (err) {
           console.log(err);
         } else if (result.length === 0) {
-          response.send({"Mensaje": "No existe el usuario"});
+          respuesta = {error: true, codigo:200, mensaje:'usuario no encontrado', data:null, result:result}
         } else {
-          response.send(result);
+          respuesta = {error: false, codigo:200, mensaje:'usuario encontrado', data:null, result:result}
+
         }
+        response.send(respuesta);
       });
     }
     
+    function putUser(request, response) {
+      
+      let respuesta;
+      let params = [request.body.name,
+                  request.body.last_name,
+                  request.body.email,
+                  request.body.photo,
+                  request.body.id_user];
+      let sql = "UPDATE user SET name = COALESCE(?, name), last_name = COALESCE(?, last_name), email = COALESCE(?, email), photo = COALESCE(?, photo) WHERE (id_user = ?);";
+
+      connection.query(sql, params, function(err, result){
+          if(err){
+              console.log(err);
+              respuesta = {error:true, codigo:200,
+                          mensaje:"Ha habido un error en la conexion", data:null, result:result}
+                          console.log(respuesta);
+          }
+          
+          else{
+              respuesta = {error:false, codigo:200,
+                           mensaje:"Se han modificado los datos", data:null, result:result}
+                           
+                 response.send(respuesta)
+         
+              }
+            })
+    }
          
    
     
 
-    module.exports = {postUser, loginUser}
+    module.exports = {postUser, loginUser, putUser}

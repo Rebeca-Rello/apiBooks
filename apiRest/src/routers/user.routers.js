@@ -9,6 +9,8 @@ router.post('/register', userCtrl.postUser);
 
 router.post('/login', userCtrl.loginUser);
 
+router.put('/usuarios', userCtrl.putUser);
+
 
 
 
